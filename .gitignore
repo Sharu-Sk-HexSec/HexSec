@@ -1,0 +1,9 @@
+node_modules/
+dist/
+work/
+*.enc
+.env*
+client_secret*.json
+__pycache__/
+*.pyc
+.DS_Store

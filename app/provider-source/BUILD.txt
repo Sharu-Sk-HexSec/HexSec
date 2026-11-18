@@ -1,0 +1,13 @@
+Original source: https://github.com/EchoMusicApp/320kbs-extension
+Revision: f45eff0e6c5c2e22396d20a9fedc6ae6b0e8ee0b
+License: MIT (see LICENSE)
+HexSec adds aural-entry.ts for catalogue, quality and radio exports.
+The suggestions use case skips upstream response metadata before parsing songs.
+
+Rebuild provider.cjs from this directory with Node.js + npm:
+  npm install --ignore-scripts
+  npm install --no-save esbuild@0.28.2
+  npx esbuild aural-entry.ts --bundle --platform=node --format=cjs --outfile=../provider.cjs
+
+The Electron main process invokes Echo.request internally; no HTTP port is
+opened by the music provider. The provider connects to JioSaavn upstream.

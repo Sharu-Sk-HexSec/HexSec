@@ -1,0 +1,18 @@
+YouTube library helper
+
+Python 3.14.10 embeddable x64
+Source: https://www.python.org/ftp/python/3.14.10/python-3.14.10-embed-amd64.zip
+Python runtime license: ../python314/LICENSE.txt
+
+Pure Python wheels downloaded from PyPI (SHA-256 checked against PyPI metadata):
+ytmusicapi 1.12.4
+requests 2.34.2
+charset-normalizer 3.5.2
+idna 3.20
+urllib3 2.8.0
+certifi 2026.10.23
+
+Their licenses and distribution metadata are preserved under
+../python314/Lib/site-packages/*.dist-info/.
+The helper source is youtube_worker.py. OAuth and storage code: youtube.cjs.
+No user OAuth client, account token, or personal library is bundled.
