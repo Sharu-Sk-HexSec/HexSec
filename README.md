@@ -4,7 +4,7 @@ A personal Windows music player with an artwork-colored blurred background, a fo
 
 ## Download
 
-Get **HexSec-Windows.zip** from [Releases](https://github.com/Sharu-Sk-HexSec/HexSec/releases/latest), extract the **complete** folder, then open **HexSec.exe**. Keep the resources and runtime files beside the executable.
+Get **HexSec-Windows-compact.zip** from [Releases](https://github.com/Sharu-Sk-HexSec/HexSec/releases/latest), extract the **complete** folder, then open **HexSec.exe**. Keep the resources and runtime files beside the executable.
 
 ## Features
 
