@@ -1,4 +1,10 @@
 $ErrorActionPreference = 'Stop'
+function Get-HexSecSHA256([string]$hexFile) {
+    $hexStream = [System.IO.File]::OpenRead($hexFile)
+    $hexHasher = [System.Security.Cryptography.SHA256]::Create()
+    try { return [System.BitConverter]::ToString($hexHasher.ComputeHash($hexStream)).Replace('-','').ToLowerInvariant() }
+    finally { $hexHasher.Dispose(); $hexStream.Dispose() }
+}
 $hexRoot = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $hexRoot
 if (-not (Test-Path node_modules/electron/install.js)) { throw 'Run npm ci first to install Electron.' }
@@ -30,7 +36,7 @@ foreach ($hexDependency in @(@('ytmusicapi','1.12.4'),@('requests','2.34.2'),@('
     if (-not $hexWheel) { throw "No pure-Python wheel for $($hexDependency[0])" }
     $hexWheelZip = Join-Path $hexCache ($hexWheel.filename + '.zip')
     Invoke-WebRequest $hexWheel.url -OutFile $hexWheelZip
-    if ((Get-FileHash -LiteralPath $hexWheelZip -Algorithm SHA256).Hash.ToLower() -ne $hexWheel.digests.sha256) { throw 'Python wheel checksum mismatch.' }
+    if ((Get-HexSecSHA256 $hexWheelZip) -ne $hexWheel.digests.sha256) { throw 'Python wheel checksum mismatch.' }
     Expand-Archive -LiteralPath $hexWheelZip -DestinationPath $hexSite -Force
 }
 Set-Content -LiteralPath (Join-Path $hexPython 'python314._pth') -Value @('python314.zip','.','Lib/site-packages','import site') -Encoding ascii
@@ -38,6 +44,6 @@ Copy-Item -LiteralPath README.md -Destination (Join-Path $hexDist 'README.md') -
 Set-Content -LiteralPath (Join-Path $hexDist 'Start HexSec.cmd') -Value '@start "" "%~dp0HexSec.exe"' -Encoding ascii
 $hexZip = Join-Path $hexRoot 'dist/HexSec-Windows.zip'
 Compress-Archive -LiteralPath $hexDist -DestinationPath $hexZip -CompressionLevel Optimal -Force
-$hexHash = (Get-FileHash -LiteralPath $hexZip -Algorithm SHA256).Hash.ToLower()
+$hexHash = Get-HexSecSHA256 $hexZip
 Set-Content -LiteralPath (Join-Path $hexRoot 'dist/SHA256SUMS.txt') -Value "$hexHash  HexSec-Windows.zip" -Encoding ascii
 Write-Output "Built $hexZip"
