@@ -4,7 +4,7 @@ A personal Windows music player with an artwork-colored blurred background, a fo
 
 ## Download
 
-[Source releases](https://github.com/Sharu-Sk-HexSec/HexSec/releases/latest) are available. The prebuilt Windows upload has not completed yet. Build the Windows ZIP using the instructions below; extract the complete built folder and open HexSec.exe.
+Download [HexSec-Windows-compact.zip](https://github.com/Sharu-Sk-HexSec/HexSec/releases/download/v0.5.1/HexSec-Windows-compact.zip), extract the complete folder, and open **HexSec.exe**. Source ZIP and SHA-256 checksums are available on the [release page](https://github.com/Sharu-Sk-HexSec/HexSec/releases/latest).
 
 ## Features
 
