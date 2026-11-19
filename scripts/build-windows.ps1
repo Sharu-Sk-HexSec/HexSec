@@ -1,7 +1,12 @@
 $ErrorActionPreference = 'Stop'
 $hexRoot = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $hexRoot
-if (-not (Test-Path node_modules/electron/dist/electron.exe)) { throw 'Run npm ci first to install Electron.' }
+if (-not (Test-Path node_modules/electron/install.js)) { throw 'Run npm ci first to install Electron.' }
+if (-not (Test-Path node_modules/electron/dist/electron.exe)) {
+    node node_modules/electron/install.js
+    if ($LASTEXITCODE -ne 0) { throw 'Electron runtime download failed.' }
+}
+if (-not (Test-Path node_modules/electron/dist/electron.exe)) { throw 'Electron runtime is missing after installation.' }
 npm run build:provider
 if ($LASTEXITCODE -ne 0) { throw 'Provider build failed.' }
 $hexDist = Join-Path $hexRoot 'dist/HexSec-Windows'
