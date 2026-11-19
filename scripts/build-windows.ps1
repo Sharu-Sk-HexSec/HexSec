@@ -7,8 +7,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Provider build failed.' }
 $hexDist = Join-Path $hexRoot 'dist/HexSec-Windows'
 $hexCache = Join-Path $hexRoot 'work/downloads'
 New-Item -ItemType Directory -Path $hexDist,$hexCache -Force | Out-Null
-Copy-Item -Path node_modules/electron/dist/* -Destination $hexDist -Recurse -Force
-Copy-Item -LiteralPath (Join-Path $hexDist 'electron.exe') -Destination (Join-Path $hexDist 'HexSec.exe') -Force
+Get-ChildItem -LiteralPath node_modules/electron/dist | Where-Object Name -ne electron.exe | Copy-Item -Destination $hexDist -Recurse -Force
+Copy-Item -LiteralPath node_modules/electron/dist/electron.exe -Destination (Join-Path $hexDist 'HexSec.exe') -Force
 $hexApp = Join-Path $hexDist 'resources/app'
 New-Item -ItemType Directory -Path $hexApp -Force | Out-Null
 # Runtime assets only: provider source and its node_modules stay in the source repository.
@@ -32,7 +32,7 @@ Set-Content -LiteralPath (Join-Path $hexPython 'python314._pth') -Value @('pytho
 Copy-Item -LiteralPath README.md -Destination (Join-Path $hexDist 'README.md') -Force
 Set-Content -LiteralPath (Join-Path $hexDist 'Start HexSec.cmd') -Value '@start "" "%~dp0HexSec.exe"' -Encoding ascii
 $hexZip = Join-Path $hexRoot 'dist/HexSec-Windows.zip'
-Compress-Archive -LiteralPath $hexDist -DestinationPath $hexZip -CompressionLevel Fastest -Force
+Compress-Archive -LiteralPath $hexDist -DestinationPath $hexZip -CompressionLevel Optimal -Force
 $hexHash = (Get-FileHash -LiteralPath $hexZip -Algorithm SHA256).Hash.ToLower()
 Set-Content -LiteralPath (Join-Path $hexRoot 'dist/SHA256SUMS.txt') -Value "$hexHash  HexSec-Windows.zip" -Encoding ascii
 Write-Output "Built $hexZip"
