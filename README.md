@@ -2,6 +2,12 @@
 
 A personal Windows music player with an artwork-colored blurred background, a focused full-window player, and online and local music playback.
 
+## Web player
+
+Open [HexSec in your browser](https://sharu-sk-hexsec.github.io/HexSec/) for online search and playback, artwork backgrounds, collections, favourites and local-file import. The web player uses a browser-compatible third-party Saavn API; availability depends on that service. Google account sync remains a Windows-only feature. Browser file imports need re-selecting after reload. Translation keys are memory-only in the web player.
+
+Rebuild the committed Pages files with `npm run build:web`. GitHub Pages serves `docs/` from `main`.
+
 ## Download
 
 Download [HexSec-Windows-compact.zip](https://github.com/Sharu-Sk-HexSec/HexSec/releases/download/v0.5.1/HexSec-Windows-compact.zip), extract the complete folder, and open **HexSec.exe**. Source ZIP and SHA-256 checksums are available on the [release page](https://github.com/Sharu-Sk-HexSec/HexSec/releases/latest).

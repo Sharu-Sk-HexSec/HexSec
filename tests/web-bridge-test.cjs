@@ -1,0 +1,9 @@
+const {JSDOM}=require('jsdom'),fs=require('fs'),assert=require('assert/strict');
+const song={id:'test1',name:'New &amp; gentle',duration:180,artists:{primary:[{name:'Artist'}]},image:[{url:'https://example.com/art.jpg'}],downloadUrl:[{quality:'96kbps',url:'https://example.com/low.m4a'},{quality:'320kbps',url:'https://example.com/high.m4a'}]};
+const calls=[];
+const dom=new JSDOM('',{url:'https://sharu-sk-hexsec.github.io/HexSec/',runScripts:'outside-only',beforeParse(w){
+ w.fetch=async(url,options)=>{calls.push({url:String(url),options});return {ok:true,json:async()=>String(url).includes('search/songs')?{success:true,data:{total:12,results:[song]}}:{success:true,data:[song]}};};
+ w.AbortSignal.timeout=()=>undefined;
+}});
+dom.window.eval(fs.readFileSync('web/web-bridge.js','utf8'));
+(async()=>{const api=dom.window.desktop;const result=await api.api('builtin','browse',{query:'Tamil',page:2});assert.equal(result.tracks[0].title,'New & gentle');assert(calls[0].url.includes('page=2'));assert.equal((await api.api('builtin','stream','test1')).quality,'320kbps');assert.equal((await api.api('builtin','qualities','test1')).streams.length,2);assert.equal(calls.length,2);await assert.rejects(()=>api.api('http://unsafe.example','search','Tamil'),/HTTPS/);await api.extras('saveSettings',{translationUrl:'https://translate.example',apiKey:'private-test'});assert(!JSON.stringify(dom.window.localStorage).includes('private-test'));assert(!JSON.stringify(dom.window.sessionStorage).includes('private-test'));assert.equal((await api.youtube('status')).connected,false);await assert.rejects(()=>api.youtube('connect'),/Windows app/);console.log('PASS web normalization, pagination, quality/cache, HTTPS and no credential persistence');dom.window.close();})().catch(e=>{console.error(e);dom.window.close();process.exitCode=1});
